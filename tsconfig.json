@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "outDir": "lib",
+    "module": "CommonJS",
+    "target": "ES5",
+    "lib": [
+      "ESNext"
+    ],
+    "declaration": true,
+    "allowJs": false,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Node",
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "esModuleInterop": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "rootDir": "src",
+    "tsBuildInfoFile": "./lib/.tsbuildinfo",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ]
+  },
+  "include": ["./src/**/*.ts"]
+}
