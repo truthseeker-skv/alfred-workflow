@@ -1,34 +1,11 @@
-import { closeIcon } from './icons';
-
 export interface IAction<T> {
   name: string;
   payload?: T;
 }
 
 export interface IItem<T> extends IItemOrig {
-  action?: IAction<T>
-}
-
-export function createItem<T>(_item: IItem<T>) {
-  const { action, ...item } = _item;
-
-  return {
-    valid: true,
-    type: ItemType.Default,
-
-    ...item,
-    variables: {
-      ...item.variables,
-      action,
-    },
-  };
-}
-
-export function createDeleteItem<T>(item: Omit<IItem<T>, 'icon'>) {
-  return createItem({
-    ...item,
-    icon: { path: closeIcon() },
-  });
+  action?: IAction<T>;
+  modifiers?: Partial<Record<ModifierKey, ModifierData<T>>>;
 }
 
 export interface IItemOrig {
@@ -97,10 +74,7 @@ export interface IItemOrig {
   /**
    * Icon for the item
    */
-  icon?: {
-    path?: string;
-    type?: string;
-  };
+  icon?: Icon;
 
   text?: {
     /**
@@ -119,7 +93,7 @@ export interface IItemOrig {
   /**
    * Optional overrides of subtitle, arg, and valid by modifiers.
    */
-  modifiers?: Record<ModifierKey, ModifierData>;
+  modifiers?: Partial<Record<ModifierKey, ModifierDataOrig>>;
 }
 
 export enum ItemType {
@@ -160,4 +134,5 @@ export enum ModifierKey {
   Fn
 }
 
-export type ModifierData = Partial<Pick<IItemOrig, 'subtitle' | 'arg' | 'valid' | 'icon' | 'variables'>>;
+export type ModifierData<T> = Partial<Pick<IItem<T>, 'subtitle' | 'arg' | 'valid' | 'icon' | 'action' | 'variables'>>;
+export type ModifierDataOrig = Partial<Pick<IItemOrig, 'subtitle' | 'arg' | 'valid' | 'icon' | 'variables'>>;

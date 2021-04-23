@@ -7,7 +7,8 @@ import * as env from './env';
 type WorkflowHandler = () => Promise<void>;
 
 export { icons, macIcons, logger, getWorkflow, env };
-export * from './item';
+export * from './items';
+export * from './items/item';
 
 export async function run(handler: WorkflowHandler): Promise<void> {
   let exitCode = 0;

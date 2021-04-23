@@ -2,7 +2,8 @@ import Conf, { Options } from 'conf';
 
 import * as env from './env';
 import { closeIcon } from './icons';
-import { createItem, IAction, IItem } from './item';
+import { IAction, IItem } from './items/item';
+import { createItem } from './items';
 import { formatError } from './logger';
 import { getFromEnv, prepareVariablesForEnv } from './variables';
 
