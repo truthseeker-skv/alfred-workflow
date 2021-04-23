@@ -1,11 +1,15 @@
 import mdfind, { Attributes } from 'mdfind';
 
+export {
+  Attributes,
+};
+
 export interface ISearchFilesParams {
   query: string;
   directories: Array<string>;
   attributes?: Array<Attributes>;
   limit?: number;
-  sortResults?: (results: Array<Record<Attributes, string>>) => Array<Record<Attributes, string>>;
+  sortResult?: (result: SearchFilesResult) => SearchFilesResult;
 }
 
 export const DEFAULT_ATTRIBUTES: Array<Attributes> = [
@@ -16,15 +20,17 @@ export const DEFAULT_ATTRIBUTES: Array<Attributes> = [
   'kMDItemFSContentChangeDate',
 ];
 
+export type SearchFilesResult = Array<Record<Attributes, string>>;
+
 export async function searchFiles({
   query,
   directories,
   attributes = DEFAULT_ATTRIBUTES,
   limit = 50,
-  sortResults,
-}: ISearchFilesParams) {
+  sortResult,
+}: ISearchFilesParams): Promise<SearchFilesResult> {
   return new Promise((resolve, reject) => {
-    let result: Array<Record<Attributes, string>> = [];
+    let result: SearchFilesResult = [];
 
     const _query = `(kMDItemDisplayName == '*${query}*'cd) || (kMDItemTextContent == '${query}'cd)`;
 
@@ -41,8 +47,8 @@ export async function searchFiles({
     res.output.on('error', (err) => reject(err));
     res.output.on('end', () => {
       resolve(
-        sortResults
-          ? sortResults(result)
+        sortResult
+          ? sortResult(result)
           : result
       );
     });
