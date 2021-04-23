@@ -9,15 +9,16 @@ declare module 'cache-conf' {
     ignoreMaxAge?: boolean;
   }
 
-  class CacheConf extends Conf {
-    constructor<T>(options: Options<T> | { version: string });
-
-    get<T>(key: string, options: GetDataOptions): T | undefined;
-    set<T>(key: string, val: T, options: SetDataOptions): void;
-    has(key: string): boolean;
-    isExpired(key: string): boolean;
+  interface CacheConf {
+    new <T>(options: Options<T> | { version: string }): {
+      get<T>(key: string, options: GetDataOptions): T | undefined;
+      set<T>(key: string, val: T, options: SetDataOptions): void;
+      has(key: string): boolean;
+      isExpired(key: string): boolean;
+    };
   }
 
-  namespace CacheConf {}
+  const CacheConf: CacheConf;
+
   export = CacheConf;
 }
