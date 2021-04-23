@@ -4,11 +4,11 @@ import * as icons from './icons';
 import * as macIcons from './icons/mac';
 import * as env from './env';
 
-type WorkflowHandler = () => Promise<void>;
-
-export { icons, macIcons, logger, getWorkflow, env };
 export * from './items';
 export * from './items/item';
+export { icons, macIcons, logger, getWorkflow, env };
+
+type WorkflowHandler = () => Promise<void>;
 
 export async function run(handler: WorkflowHandler): Promise<void> {
   let exitCode = 0;
