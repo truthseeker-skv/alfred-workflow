@@ -1,4 +1,5 @@
 import Conf, { Options } from 'conf';
+import CacheConf from 'cache-conf';
 
 import * as env from './env';
 import { closeIcon } from './icons';
@@ -12,6 +13,7 @@ export type Workflow = ReturnType<typeof getWorkflow>;
 export function getWorkflow<T>(params: WorkflowOptions<T> = {}) {
   const input = process.argv[2] || '';
   const config = initConfig(params.configOptions);
+  const cache = initCache(params.cacheOptions);
   const { action, ...variables } = getFromEnv();
 
   function pushAction<T>(action: IAction<T>) {
@@ -64,6 +66,7 @@ export function getWorkflow<T>(params: WorkflowOptions<T> = {}) {
     env,
     input,
     config,
+    cache,
     action: action || { name: null },
     variables: variables || {},
     sendResult,
@@ -82,8 +85,18 @@ function initConfig<T>(params: ConfigOptions<T> = {}) {
   });
 }
 
+function initCache<T>(params: ConfigOptions<T> = {}) {
+  return new CacheConf({
+    configName: 'cache',
+    cwd: env.cachePath(),
+    version: env.version(),
+    ...params,
+  });
+}
+
 export interface WorkflowOptions<T> {
   configOptions?: ConfigOptions<T>;
+  cacheOptions?: ConfigOptions<T>;
 }
 
 interface ISendFeedbackParams {
