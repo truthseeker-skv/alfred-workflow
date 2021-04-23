@@ -1,6 +1,6 @@
 import Conf, { Options } from 'conf';
-import CacheConf from 'cache-conf';
 
+import { cacheConf } from './cache';
 import * as env from './env';
 import { closeIcon } from './icons';
 import { IAction, IItem } from './items/item';
@@ -86,7 +86,7 @@ function initConfig<T>(params: ConfigOptions<T> = {}) {
 }
 
 function initCache<T>(params: ConfigOptions<T> = {}) {
-  return new CacheConf({
+  return cacheConf({
     configName: 'cache',
     cwd: env.cachePath(),
     version: env.version(),

@@ -12,7 +12,6 @@
     "clean": "rimraf ./lib"
   },
   "dependencies": {
-    "cache-conf": "0.6.0",
     "clean-stack": "3.0.1",
     "conf": "9.0.2",
     "invariant": "2.2.4",
