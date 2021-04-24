@@ -1,6 +1,6 @@
 {
   "name": "@truthseeker-skv/alfred-workflow",
-  "version": "0.0.16",
+  "version": "0.0.17",
   "main": "lib/index.js",
   "files": [
     "./lib"
@@ -17,6 +17,7 @@
     "invariant": "2.2.4",
     "lodash": "4.17.20",
     "mdfind": "1.0.0",
+    "node-osascript": "2.1.0",
     "readdirp": "3.6.0",
     "tslib": "2.1.0"
   },
