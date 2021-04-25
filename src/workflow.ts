@@ -1,4 +1,5 @@
 import Conf, { Options } from 'conf';
+import osascript from 'node-osascript';
 
 import { cacheConf } from './cache';
 import * as env from './env';
@@ -10,7 +11,7 @@ import { getFromEnv, prepareVariablesForEnv } from './variables';
 
 export type Workflow = ReturnType<typeof getWorkflow>;
 
-export function getWorkflow<T>(params: WorkflowOptions<T> = {}) {
+export function getWorkflow<Conf, Cache>(params: WorkflowOptions<Conf, Cache> = {}) {
   const input = process.argv[2] || '';
   const config = initConfig(params.configOptions);
   const cache = initCache(params.cacheOptions);
@@ -24,7 +25,7 @@ export function getWorkflow<T>(params: WorkflowOptions<T> = {}) {
   }
 
   function sendResult(
-    items?: IItem<T> | Array<IItem<T>>,
+    items?: IItem<unknown> | Array<IItem<unknown>>,
     params: ISendFeedbackParams = {}
   ) {
     const result = prepareVariablesForEnv({
@@ -72,13 +73,34 @@ export function getWorkflow<T>(params: WorkflowOptions<T> = {}) {
     sendResult,
     pushAction,
     sendError,
+    runExternal,
+    runOsascript: osascript.execute,
+    runOsascriptFile: osascript.executeFile,
   };
+}
+
+export interface IRunExternalParams {
+  trigger: string;
+  applicationId?: string;
+  workflowBundleId?: string;
+  argument?: string;
+}
+
+function runExternal({
+  applicationId = 'com.runningwithcrayons.Alfred',
+  workflowBundleId = env.wfBundleId(),
+  trigger,
+  argument = 'test',
+}: IRunExternalParams) {
+  osascript.execute(
+    `tell application id "${applicationId}" to run trigger "${trigger}" in workflow "${workflowBundleId}" with argument "${argument}"`
+  );
 }
 
 export type ConfigOptions<T> = Omit<Options<T>, 'cwd' | 'serialize'>;
 
 function initConfig<T>(params: ConfigOptions<T> = {}) {
-  return new Conf({
+  return new Conf<T>({
     cwd: env.dataPath(),
     serialize: (value) => JSON.stringify(value, null, 2),
     ...params,
@@ -86,7 +108,7 @@ function initConfig<T>(params: ConfigOptions<T> = {}) {
 }
 
 function initCache<T>(params: ConfigOptions<T> = {}) {
-  return cacheConf({
+  return cacheConf<T>({
     configName: 'cache',
     cwd: env.cachePath(),
     version: env.version(),
@@ -94,9 +116,9 @@ function initCache<T>(params: ConfigOptions<T> = {}) {
   });
 }
 
-export interface WorkflowOptions<T> {
-  configOptions?: ConfigOptions<T>;
-  cacheOptions?: ConfigOptions<T>;
+export interface WorkflowOptions<Conf, Cache> {
+  configOptions?: ConfigOptions<Conf>;
+  cacheOptions?: ConfigOptions<Cache>;
 }
 
 interface ISendFeedbackParams {

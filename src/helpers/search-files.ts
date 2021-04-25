@@ -41,10 +41,10 @@ export async function searchFiles({
       directories,
     });
 
+    res.output.on('error', reject);
     res.output.on('data', (data) => {
       result = result.concat(data);
     });
-    res.output.on('error', (err) => reject(err));
     res.output.on('end', () => {
       resolve(
         sortResult

@@ -23,7 +23,7 @@ export function cacheConf<T>(options?: ICacheOptions<T>) {
 
   function get(key: keyof T, options?: IGetConfDataOptions): T[keyof T] | null {
     if (!options?.ignoreMaxAge && isExpired(key)) {
-      config.delete(key);
+      del(key);
       return null;
     }
 
@@ -32,10 +32,10 @@ export function cacheConf<T>(options?: ICacheOptions<T>) {
     return item ? item.data : null;
   }
 
-  function set(key: string, value: T[keyof T], options: ISetConfDataOptions) {
+  function set(key: string, value: T[keyof T], opts: ISetConfDataOptions) {
     config.set(key, {
-      timestamp: Date.now() + options.maxAge,
-      version: '',
+      timestamp: Date.now() + opts.maxAge,
+      version: options?.version,
       data: value,
     });
   }
@@ -46,7 +46,7 @@ export function cacheConf<T>(options?: ICacheOptions<T>) {
     }
 
     if (isExpired(key)) {
-      config.delete(key);
+      del(key);
       return false;
     }
 
@@ -66,10 +66,25 @@ export function cacheConf<T>(options?: ICacheOptions<T>) {
     return invalidTimestamp || invalidVersion;
   }
 
+  function del(key: keyof T): void {
+    config.delete(key);
+  }
+
+  function clear(): void {
+    config.clear();
+  }
+
+  function reset(key: keyof T): void {
+    config.reset(key);
+  }
+
   return {
     get,
     set,
     has,
     isExpired,
+    delete: del,
+    clear,
+    reset,
   };
 }
