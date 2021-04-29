@@ -8,6 +8,7 @@ export const alertIcon = () => icon('./png/alert.png');
 export const helpIcon = () => icon('./png/help.png');
 export const plusIcon = () => icon('./png/plus.png');
 export const minusIcon = () => icon('./png/minus.png');
+export const reloadIcon = () => icon('./png/reload.png');
 export const clockIcon = () => icon('./png/clock.png');
 
 function icon(iconPath: string) {
