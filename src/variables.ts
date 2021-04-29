@@ -1,6 +1,6 @@
 import isObject from 'lodash/isObject';
 
-const ENV_VAR_PREFIX = 'wf:';
+const ENV_VAR_PREFIX = 'wf_';
 
 export function getFromEnv() {
   return Object.keys(process.env).reduce((acc: Record<string, any>, key: string) => {
